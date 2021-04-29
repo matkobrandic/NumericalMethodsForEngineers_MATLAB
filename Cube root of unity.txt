@@ -1,0 +1,56 @@
+close all; clear all; clc;
+% Defining function and derivative
+f = @(Z) Z.^3-1;
+fp = @(Z) 3*Z.^2;
+
+% roots of our function
+root1 = 1; 
+root2 = -1/2 + 1i*sqrt(3)/2; % put 1i because of i - iterator
+root3 = -1/2 - 1i*sqrt(3)/2;
+
+% area and subdivision
+nx = 8000; ny = 8000;
+xmin = -2; xmax = 2;
+ymin = -2; ymax = 2;
+
+% creating points on complex plane
+x = linspace(xmin,xmax,nx);
+y = linspace(ymin,ymax,ny);
+[X,Y] = meshgrid(x,y);
+Z = X + 1i*Y;
+
+
+nit =40; % should be sufficient time to converge
+% z is a matrix
+for n=1:nit
+    Z = Z - f(Z) ./ fp(Z);
+end
+
+eps = 0.001;
+% abs is complex modulus if input is complex number
+Z1 = abs(Z-root1) < eps; % Logical mtrx - all points that converge to root1
+Z2 = abs(Z-root2) < eps; % Logical mtrx - all points that converge to root2
+Z3 = abs(Z-root3) < eps; % Logical mtrx - all points that converge to root3
+Z4 = ~(Z1+Z2+Z3); % value of 1 at point that did not converge to roots
+
+figure;
+map = [1 0 0; 0 1 0; 0 0 1; 0 0 0]; colormap(map); %[red;green;blue;black]
+Z = (Z1 + 2*Z2 + 3*Z3 + 4*Z4); % 1 gets red color-code, 2 gets green,...
+image([xmin,xmax], [ymin,ymax], Z);
+set(gca,'YDir','normal'); % without this my Y-axis will be upside down
+
+axis equal; axis tight;
+set(gca,'XTick',linspace(xmin,xmax,5),'YTick',linspace(ymin,ymax,5));
+xlabel('$x$','Interpreter',"latex","FontSize",14);
+ylabel('$y$','Interpreter',"latex","FontSize",14);
+title('Fractal from $f(z)=z^3-1','Interpreter',"latex",'FontSize',16);
+
+
+
+
+
+
+
+
+
+

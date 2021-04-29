@@ -1,0 +1,10 @@
+dxdt = @(x,r) r*x*(1-x);
+r = 1; % 
+x0 = 0.01; % initial condition
+tspan  = [0 10];
+[t,x] = ode45(@(t,x) dxdt(x,r), tspan, x0);
+% t,x two column vectors of the same length
+plot(t,x);
+xlabel('$t$','Interpreter', 'latex', 'FontSize', 14);
+ylabel('$x$','Interpreter', 'latex', 'FontSize', 14);
+title('Logistic Equation', 'Interpreter','latex', 'FontSize', 16);
